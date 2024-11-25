@@ -1,148 +1,101 @@
-# Decentralized Voting Application (initial setup)
+# CarnavalScores Smart Contract
 
-Objective: To create a secure and transparent voting platform leveraging blockchain technology to ensure the integrity of the voting process.
+## Overview
+The **CarnavalScores** smart contract is a Solidity-based Ethereum contract designed to manage the scoring of samba schools in the Carnival of Rio de Janeiro. The contract includes functionalities for adding judges, schools, and scoring criteria, as well as recording and retrieving scores. It also ensures that only authorized personnel can add or clear data, maintaining the integrity and security of the scoring process.
 
-Steps:
+## Smart Contract Details
 
-### Define the Project Scope:
-Implement a decentralized voting system where votes are recorded on a blockchain.
+### Features
+1. **Adding Judges (Jurados)**: Allows the contract owner to add new judges who can later submit scores.
+2. **Adding Schools (Escolas)**: Enables the contract owner to add new samba schools that will be judged.
+3. **Adding Criteria (Quesitos)**: Permits the contract owner to add new scoring criteria.
+4. **Recording Scores (Notas)**: Judges can record scores for specific schools based on different criteria.
+5. **Retrieving Scores**: Anyone can retrieve the scores for a particular school and criteria.
+6. **Clearing Data**: The contract owner can clear all stored data, if needed.
 
-Allow users to view results in real-time while ensuring anonymity and security.
+### Contract Structure
+- **Jurado**: Struct containing judge's address and name.
+- **Escola**: Struct containing school's ID and name.
+- **Quesito**: Struct containing criteria's ID and name.
+- **Nota**: Struct containing school ID, criteria ID, judge's address, and score.
 
-### Research and Planning:
-Research existing decentralized voting systems and understand their architecture.
+### Mappings and Arrays
+- **quantidadeJurados**: Array storing judge details.
+- **escolas**: Array storing school details.
+- **quesitos**: Array storing criteria details.
+- **notas**: Array storing all recorded scores.
+- **jurados**: Mapping of judge addresses to judge details.
+- **notasPorEscolaQuesito**: Mapping of school ID and criteria ID to scores.
 
-Plan out the features you’ll need: user registration, voting interface, results dashboard.
+### Modifiers
+- **onlyOwner**: Ensures that only the contract owner can execute certain functions, providing access control.
 
-### Setup Your Development Environment:
-Install necessary tools: Node.js, Truffle, Ganache, Web3.js, React.
+### Events
+- **JuradoAdicionado**: Emitted when a new judge is added.
+- **EscolaAdicionada**: Emitted when a new school is added.
+- **QuesitoAdicionado**: Emitted when a new criteria is added.
 
-Initialize a Git repository for version control.
+## Functions
 
-### Design the Project Architecture:
-Smart contract to handle voting logic.
+### addJurado
+```solidity
+function addJurado(string memory _nomeJurado) public onlyOwner returns (uint)
+```
+Allows the contract owner to add a new judge.
 
-Backend to interact with the blockchain.
+### addEscola
+```solidity
+function addEscola(string memory _nomeEscola) public onlyOwner returns (uint)
+```
+Allows the contract owner to add a new team.
 
-Frontend for user interactions.
+### addQuesito
+```solidity
+function addQuesito(string memory _nomeQuesito) public onlyOwner returns (uint)
+```
+Allows the contract owner to add a new criteria.
 
-### Build the Smart Contract:
-Write a Solidity smart contract for voting.
+### registrarNota
+```solidity
+function registrarNota(uint _escolaId, uint _quesitoId, uint _nota) public
+```
+Allows judges to record scores for a specific team and criteria.
 
-Deploy the contract on a test network (e.g., Rinkeby).
+### getNota
+```solidity
+function getNota(uint _escolaId, uint _quesitoId) public view returns (uint)
+```
+Allows anyone to retrieve the score for a specific team and criteria.
 
-Sample Smart Contract:
+### limparDados
+```solidity
+function limparDados() public onlyOwner
+```
+Allows the contract owner to clear all stored data.
 
-solidity
-pragma solidity ^0.8.0;
+### Security Considerations
+Access Control: The onlyOwner modifier ensures that only the contract owner can add or clear data.
 
-contract Voting {
-    struct Candidate {
-        uint id;
-        string name;
-        uint voteCount;
-    }
+Validations: The contract includes validations for the range of scores and ensures that only authorized judges can record scores.
 
-    mapping(uint => Candidate) public candidates;
-    mapping(address => bool) public voters;
-    uint public candidatesCount;
+### Usage
+Deploy the Contract: Deploy the CarnavalScores contract to the Ethereum network.
 
-    function addCandidate(string memory _name) public {
-        candidatesCount++;
-        candidates[candidatesCount] = Candidate(candidatesCount, _name, 0);
-    }
+Add Data: Use the addJurado, addEscola, and addQuesito functions to add judges, schools, and criteria.
 
-    function vote(uint _candidateId) public {
-        require(!voters[msg.sender], "Already voted.");
-        require(_candidateId > 0 && _candidateId <= candidatesCount, "Invalid candidate.");
+Record Scores: Judges can use the registrarNota function to record scores.
 
-        voters[msg.sender] = true;
-        candidates[_candidateId].voteCount++;
-    }
-}
-### Develop the Frontend:
+Retrieve Scores: Anyone can use the getNota function to retrieve scores.
 
-Use React to build a user-friendly interface.
+Clear Data: The contract owner can use the limparDados function to clear all stored data when needed.
 
-Connect the frontend with the smart contract using Web3.js.
+### Contact
+For questions or further information, please contact me: emanoel_oliveira@outlook.com
+    
 
-Example Component:
 
-javascript
-import Web3 from 'web3';
-import { useState, useEffect } from 'react';
-import VotingContract from './contracts/Voting.json';
 
-function App() {
-    const [account, setAccount] = useState('');
-    const [candidates, setCandidates] = useState([]);
 
-    useEffect(() => {
-        loadBlockchainData();
-    }, []);
 
-    async function loadBlockchainData() {
-        const web3 = new Web3(Web3.givenProvider || "http://localhost:7545");
-        const accounts = await web3.eth.getAccounts();
-        setAccount(accounts[0]);
 
-        const networkId = await web3.eth.net.getId();
-        const votingData = VotingContract.networks[networkId];
-        if (votingData) {
-            const voting = new web3.eth.Contract(VotingContract.abi, votingData.address);
-            const candidatesCount = await voting.methods.candidatesCount().call();
-            const tempCandidates = [];
-            for (let i = 1; i <= candidatesCount; i++) {
-                const candidate = await voting.methods.candidates(i).call();
-                tempCandidates.push(candidate);
-            }
-            setCandidates(tempCandidates);
-        }
-    }
-
-    return (
-        <div>
-            <h1>Decentralized Voting System</h1>
-            <p>Your Account: {account}</p>
-            <ul>
-                {candidates.map(candidate => (
-                    <li key={candidate.id}>
-                        {candidate.name} - {candidate.voteCount} votes
-                    </li>
-                ))}
-            </ul>
-        </div>
-    );
-}
-
-export default App;
-### Implement Authentication and Security:
-
-Ensure secure user authentication.
-
-Implement measures to prevent double voting and other fraudulent activities.
-
-### Testing:
-
-Write unit tests for your smart contract.
-
-Perform end-to-end testing to ensure the entire system works seamlessly.
-
-### Documentation:
-
-Document your code thoroughly.
-
-Prepare user guides and a presentation showcasing the project.
-
-### Deployment:
-
-Deploy the frontend on a platform like GitHub Pages, Netlify, or Vercel.
-
-Deploy the backend on a service like Heroku or AWS.
-
-### Presentation:
-
-Create a compelling presentation highlighting the features and benefits.
-
-Include live demos and address potential questions or concerns.
 

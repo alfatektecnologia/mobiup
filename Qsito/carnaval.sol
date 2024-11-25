@@ -97,11 +97,12 @@ contract CarnavalScores is ERC20 {
         notas.push(nota);
         notasPorEscolaQuesito[_escolaId][_quesitoId] = nota;
     }
+  
+    // Get a score by escolaId and quesitoId
+    function getNota(uint _escolaId, uint _quesitoId) public view returns (uint256) {
+        require(notasPorEscolaQuesito[_escolaId][_quesitoId].nota > 0, "Nota nao encontrada");
     
-    // Get the score for a team
-    function getNota(uint _escolaId, uint _quesitoId) public view returns (uint) {
-        Nota storage nota = notasPorEscolaQuesito[_escolaId][_quesitoId];
-        return nota.nota;
+        return notasPorEscolaQuesito[_escolaId][_quesitoId].nota;
     }
 
     // Clear all stored data

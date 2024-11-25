@@ -827,11 +827,11 @@
 			]
 		},
 		"Qsito/carnaval.sol": {
-			"keccak256": "0xedba6870df2d1ffeda0862807ab101444e4dd577c8cc734621fc7f3165a3f0ac",
+			"keccak256": "0xc19cfb21db305467f4a15b9a35b377ee43b37d1c5bbf36c178924d2ac1ebd45e",
 			"license": "MIT",
 			"urls": [
-				"bzz-raw://c72384512e76990fc93061a29af4c945cf300b902046fe923be98a42bfde55df",
-				"dweb:/ipfs/QmQacSR2iYzMVVJUTT4h4XQ1h79Y3nXMW27TynLnrYKBsm"
+				"bzz-raw://f3ea8b8081e3f69ac9c4df77ca01d56c029afee6aa05392c489155c2a65d56f5",
+				"dweb:/ipfs/QmZ7qqhGRsewVqbJSMi8ANW5Mo6gBUevYhA3bUBura4Lhj"
 			]
 		}
 	},

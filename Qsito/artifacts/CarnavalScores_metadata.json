@@ -164,9 +164,9 @@
 				"inputs": [
 					{
 						"indexed": false,
-						"internalType": "uint8",
+						"internalType": "uint256",
 						"name": "id",
-						"type": "uint8"
+						"type": "uint256"
 					},
 					{
 						"indexed": false,
@@ -506,6 +506,19 @@
 				"type": "function"
 			},
 			{
+				"inputs": [],
+				"name": "owner",
+				"outputs": [
+					{
+						"internalType": "address",
+						"name": "",
+						"type": "address"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
 				"inputs": [
 					{
 						"internalType": "uint256",
@@ -556,19 +569,19 @@
 			{
 				"inputs": [
 					{
-						"internalType": "uint8",
+						"internalType": "uint256",
 						"name": "_escolaId",
-						"type": "uint8"
+						"type": "uint256"
 					},
 					{
-						"internalType": "uint8",
+						"internalType": "uint256",
 						"name": "_quesitoId",
-						"type": "uint8"
+						"type": "uint256"
 					},
 					{
-						"internalType": "uint16",
+						"internalType": "uint256",
 						"name": "_nota",
-						"type": "uint16"
+						"type": "uint256"
 					}
 				],
 				"name": "registrarNota",
@@ -814,11 +827,11 @@
 			]
 		},
 		"Qsito/carnaval.sol": {
-			"keccak256": "0xa776ddbf068aa770742957c247c6c171e7d7eee90ccb9f4d79bef29410ee362c",
+			"keccak256": "0xedba6870df2d1ffeda0862807ab101444e4dd577c8cc734621fc7f3165a3f0ac",
 			"license": "MIT",
 			"urls": [
-				"bzz-raw://eed4fff8bf69ad043e6d50aecdd5fdf6a125cc60eb45c75d7ecbf0abd7003f25",
-				"dweb:/ipfs/QmbFGXEygLHnrz4X4vwtxBhTpdbQ4VmVRV8W4cW4xjoQVM"
+				"bzz-raw://c72384512e76990fc93061a29af4c945cf300b902046fe923be98a42bfde55df",
+				"dweb:/ipfs/QmQacSR2iYzMVVJUTT4h4XQ1h79Y3nXMW27TynLnrYKBsm"
 			]
 		}
 	},

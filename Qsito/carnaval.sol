@@ -7,6 +7,7 @@ contract CarnavalScores is ERC20 {
     struct Jurado {
         address endereco;
         string nome;
+        uint quesitoId;
     }
 
     struct Escola {
@@ -27,12 +28,12 @@ contract CarnavalScores is ERC20 {
     }
 
     uint internal constant QUANTIDADE_JURADOS = 36;
-    uint internal constant QUANTIDADE_QUESITOS = 9;
-    uint internal constant QUANTIDADE_ESCOLAS = 15;
+    uint internal constant QUANTIDADE_QUESITOS = 8;
+    uint internal constant QUANTIDADE_ESCOLAS = 12;
 
     Jurado[QUANTIDADE_JURADOS] public quantidadeJurados;
-    Escola[QUANTIDADE_ESCOLAS] public escolas;
-    Quesito[QUANTIDADE_QUESITOS] public quesitos;
+    Escola[] private _escolas;
+    Quesito[] private _quesitos;
     Nota[] public notas;
     
     mapping(address => Jurado) public jurados;
@@ -53,35 +54,39 @@ contract CarnavalScores is ERC20 {
     uint private _currentEscolaIndex = 0;
     uint private _currentQuesitoIndex = 0;
     event JuradoAdicionado(address indexed jurado, string _nome);
-    event EscolaAdicionada(uint id, string _nome);
-    event QuesitoAdicionado(uint id, string _nome);
+    event EscolasAdicionadas(string[] _nome);
+    event QuesitoAdicionados(string[] _nome);
 
     // Add new judge
-    function addJurado(string memory _nomeJurado) public onlyOwner returns (uint) {
+    function addJurado(string memory _nomeJurado, uint _quesitoId) public onlyOwner returns (uint) {
         require(_currentJuradoIndex < QUANTIDADE_JURADOS, "Quantidade maxima de jurados");
-        jurados[msg.sender] = Jurado({endereco: msg.sender, nome: _nomeJurado});
-        quantidadeJurados[_currentJuradoIndex] = Jurado({endereco: msg.sender, nome: _nomeJurado});
+        jurados[msg.sender] = Jurado({endereco: msg.sender, nome: _nomeJurado, quesitoId: _quesitoId});
+        quantidadeJurados[_currentJuradoIndex] = Jurado({endereco: msg.sender, nome: _nomeJurado, quesitoId: _quesitoId});
         _currentJuradoIndex++;
         emit JuradoAdicionado(msg.sender, _nomeJurado);
         return _currentJuradoIndex - 1;
     }
 
-    // Add new team
-    function addEscola(string memory _nomeEscola) public onlyOwner returns (uint) {
-        require(_currentEscolaIndex < QUANTIDADE_ESCOLAS, "Quantidade maxima de escolas");
-        escolas[_currentEscolaIndex] = Escola({id: _currentEscolaIndex, nome: _nomeEscola});
-        emit EscolaAdicionada(_currentEscolaIndex, _nomeEscola);
-        _currentEscolaIndex++;      
-        return _currentEscolaIndex - 1;
+    // Add new teams
+    function addEscolas(string[] memory _nomeEscolas) public onlyOwner {
+        require(_escolas.length < QUANTIDADE_ESCOLAS,"Quantidade maxima de escolas atingida");
+        for (uint i = 0; i < _nomeEscolas.length; i++) {
+            require(_currentEscolaIndex < QUANTIDADE_ESCOLAS, "Quantidade maxima de escolas atingida");
+            _escolas.push(Escola({id: _currentEscolaIndex, nome: _nomeEscolas[i]}));
+            _currentEscolaIndex++;
+        }
+        emit EscolasAdicionadas(_nomeEscolas);
     }
 
-    // Add new quesito
-    function addQuesito(string memory _nomeQuesito) public onlyOwner returns (uint) {
-        require(_currentQuesitoIndex < QUANTIDADE_QUESITOS, "Quantidade maxima de quesitos");
-        quesitos[_currentQuesitoIndex] = Quesito({id: _currentQuesitoIndex, nome: _nomeQuesito});
-        emit QuesitoAdicionado(_currentQuesitoIndex, _nomeQuesito);
-        _currentQuesitoIndex++;
-        return _currentQuesitoIndex - 1;
+    // Add new quesitos
+    function addQuesitos(string[] memory _nomeQuesitos) public onlyOwner {
+        require(_quesitos.length < QUANTIDADE_QUESITOS, "Quantidade maxima de quesitos atingida");
+        for (uint i = 0; i < _nomeQuesitos.length; i++) {
+            require(_currentQuesitoIndex < QUANTIDADE_QUESITOS, "Quantidade maxima de quesitos atingida");
+            _quesitos.push(Quesito({id: _currentQuesitoIndex, nome: _nomeQuesitos[i]}));
+            _currentQuesitoIndex++;
+        }
+        emit QuesitoAdicionados(_nomeQuesitos);
     }
 
     // Save a score
@@ -101,17 +106,29 @@ contract CarnavalScores is ERC20 {
     // Get a score by escolaId and quesitoId
     function getNota(uint _escolaId, uint _quesitoId) public view returns (uint256) {
         require(notasPorEscolaQuesito[_escolaId][_quesitoId].nota > 0, "Nota nao encontrada");
-    
         return notasPorEscolaQuesito[_escolaId][_quesitoId].nota;
+    }
+
+    // Get all quesitos
+    function getAllQuesitos() public view returns  (Quesito[] memory){
+        require(_quesitos.length > 0, "No quesitos found");
+    
+        return _quesitos;
+    }
+    // Get all escolas
+    function getAllEscolas() public view returns  (Escola[] memory){
+        require(_escolas.length > 0, "No escola found");
+    
+        return _escolas;
     }
 
     // Clear all stored data
     function limparDados() public onlyOwner {
         delete quantidadeJurados;
-        delete escolas;
-        delete quesitos;
+        delete _escolas;
+        delete _quesitos;
         delete notas;
-       
+
         // Reinitializing mappings
         for (uint i = 0; i < QUANTIDADE_ESCOLAS; i++) {
             for (uint j = 0; j < QUANTIDADE_QUESITOS; j++) {
@@ -120,3 +137,4 @@ contract CarnavalScores is ERC20 {
         }
     }
 }
+

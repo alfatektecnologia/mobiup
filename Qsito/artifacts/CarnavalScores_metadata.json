@@ -126,18 +126,12 @@
 				"inputs": [
 					{
 						"indexed": false,
-						"internalType": "uint256",
-						"name": "id",
-						"type": "uint256"
-					},
-					{
-						"indexed": false,
-						"internalType": "string",
+						"internalType": "string[]",
 						"name": "_nome",
-						"type": "string"
+						"type": "string[]"
 					}
 				],
-				"name": "EscolaAdicionada",
+				"name": "EscolasAdicionadas",
 				"type": "event"
 			},
 			{
@@ -164,18 +158,12 @@
 				"inputs": [
 					{
 						"indexed": false,
-						"internalType": "uint256",
-						"name": "id",
-						"type": "uint256"
-					},
-					{
-						"indexed": false,
-						"internalType": "string",
+						"internalType": "string[]",
 						"name": "_nome",
-						"type": "string"
+						"type": "string[]"
 					}
 				],
-				"name": "QuesitoAdicionado",
+				"name": "QuesitoAdicionados",
 				"type": "event"
 			},
 			{
@@ -206,19 +194,13 @@
 			{
 				"inputs": [
 					{
-						"internalType": "string",
-						"name": "_nomeEscola",
-						"type": "string"
+						"internalType": "string[]",
+						"name": "_nomeEscolas",
+						"type": "string[]"
 					}
 				],
-				"name": "addEscola",
-				"outputs": [
-					{
-						"internalType": "uint256",
-						"name": "",
-						"type": "uint256"
-					}
-				],
+				"name": "addEscolas",
+				"outputs": [],
 				"stateMutability": "nonpayable",
 				"type": "function"
 			},
@@ -228,6 +210,11 @@
 						"internalType": "string",
 						"name": "_nomeJurado",
 						"type": "string"
+					},
+					{
+						"internalType": "uint256",
+						"name": "_quesitoId",
+						"type": "uint256"
 					}
 				],
 				"name": "addJurado",
@@ -244,19 +231,13 @@
 			{
 				"inputs": [
 					{
-						"internalType": "string",
-						"name": "_nomeQuesito",
-						"type": "string"
+						"internalType": "string[]",
+						"name": "_nomeQuesitos",
+						"type": "string[]"
 					}
 				],
-				"name": "addQuesito",
-				"outputs": [
-					{
-						"internalType": "uint256",
-						"name": "",
-						"type": "uint256"
-					}
-				],
+				"name": "addQuesitos",
+				"outputs": [],
 				"stateMutability": "nonpayable",
 				"type": "function"
 			},
@@ -341,24 +322,50 @@
 				"type": "function"
 			},
 			{
-				"inputs": [
-					{
-						"internalType": "uint256",
-						"name": "",
-						"type": "uint256"
-					}
-				],
-				"name": "escolas",
+				"inputs": [],
+				"name": "getAllEscolas",
 				"outputs": [
 					{
-						"internalType": "uint256",
-						"name": "id",
-						"type": "uint256"
-					},
+						"components": [
+							{
+								"internalType": "uint256",
+								"name": "id",
+								"type": "uint256"
+							},
+							{
+								"internalType": "string",
+								"name": "nome",
+								"type": "string"
+							}
+						],
+						"internalType": "struct CarnavalScores.Escola[]",
+						"name": "",
+						"type": "tuple[]"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [],
+				"name": "getAllQuesitos",
+				"outputs": [
 					{
-						"internalType": "string",
-						"name": "nome",
-						"type": "string"
+						"components": [
+							{
+								"internalType": "uint256",
+								"name": "id",
+								"type": "uint256"
+							},
+							{
+								"internalType": "string",
+								"name": "nome",
+								"type": "string"
+							}
+						],
+						"internalType": "struct CarnavalScores.Quesito[]",
+						"name": "",
+						"type": "tuple[]"
 					}
 				],
 				"stateMutability": "view",
@@ -407,6 +414,11 @@
 						"internalType": "string",
 						"name": "nome",
 						"type": "string"
+					},
+					{
+						"internalType": "uint256",
+						"name": "quesitoId",
+						"type": "uint256"
 					}
 				],
 				"stateMutability": "view",
@@ -537,30 +549,11 @@
 						"internalType": "string",
 						"name": "nome",
 						"type": "string"
-					}
-				],
-				"stateMutability": "view",
-				"type": "function"
-			},
-			{
-				"inputs": [
-					{
-						"internalType": "uint256",
-						"name": "",
-						"type": "uint256"
-					}
-				],
-				"name": "quesitos",
-				"outputs": [
-					{
-						"internalType": "uint256",
-						"name": "id",
-						"type": "uint256"
 					},
 					{
-						"internalType": "string",
-						"name": "nome",
-						"type": "string"
+						"internalType": "uint256",
+						"name": "quesitoId",
+						"type": "uint256"
 					}
 				],
 				"stateMutability": "view",
@@ -827,11 +820,11 @@
 			]
 		},
 		"Qsito/carnaval.sol": {
-			"keccak256": "0xc19cfb21db305467f4a15b9a35b377ee43b37d1c5bbf36c178924d2ac1ebd45e",
+			"keccak256": "0x7c172c7d95afe2aa3af19baeeef9ab05a6f1dc275b4a937ae53b9617b34ea4ad",
 			"license": "MIT",
 			"urls": [
-				"bzz-raw://f3ea8b8081e3f69ac9c4df77ca01d56c029afee6aa05392c489155c2a65d56f5",
-				"dweb:/ipfs/QmZ7qqhGRsewVqbJSMi8ANW5Mo6gBUevYhA3bUBura4Lhj"
+				"bzz-raw://b38b691308ed8bc7a054ace2694b425006243cc4cc6ba1fcf5c31775791a611e",
+				"dweb:/ipfs/QmXckzaEvStKaZHKe8YaRWuqmZfp556rActaHahjehBtg7"
 			]
 		}
 	},

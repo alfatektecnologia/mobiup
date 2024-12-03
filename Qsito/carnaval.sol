@@ -28,21 +28,28 @@ contract CarnavalScores is ERC20 {
     }
 
     uint internal constant QUANTIDADE_JURADOS = 36;
-    uint internal constant QUANTIDADE_QUESITOS = 8;
+    uint internal constant QUANTIDADE_QUESITOS = 9;
     uint internal constant QUANTIDADE_ESCOLAS = 12;
 
-    Jurado[QUANTIDADE_JURADOS] public quantidadeJurados;
+    Jurado[] private  quantidadeJurados;
     Escola[] private _escolas;
     Quesito[] private _quesitos;
-    Nota[] public notas;
+    Nota[] private notas;
     
-    mapping(address => Jurado) public jurados;
+    mapping(address => Jurado) private jurados;
     mapping(uint => mapping(uint => Nota)) public notasPorEscolaQuesito;  // Mapeamento de notas por escola e quesito
 
     address public owner;
+    string[] private nomeEscolas = ["Unidos de Padre Miguel","Imperatriz Leopoldinense","Unidos do Viradouro","Estacoes Primeira de Mangueira",
+    "Unidos da Tijuca","Beija-Flor de Nilopolis","Academicos do Salgueiro","Unidos de Vila Isabel","Mocidade Independente de Padre Miguel",
+    "Paraiso do Tuiuti","Academicos do Grande Rio","Portela"];
+
+    string[] private qsitos = ["Samba-enredo","Bateria","Harmonia","Evolucao","Comissao de frente","Alegorias","Fantasia","Mestre-sala","Enredo"];
     
     constructor() ERC20("CarnavalScores", "CCS") {
         owner = msg.sender;
+        addEscolas(nomeEscolas);
+        addQuesitos(qsitos);
     }
 
     modifier onlyOwner() {
@@ -53,22 +60,24 @@ contract CarnavalScores is ERC20 {
     uint private _currentJuradoIndex = 0;
     uint private _currentEscolaIndex = 0;
     uint private _currentQuesitoIndex = 0;
-    event JuradoAdicionado(address indexed jurado, string _nome);
-    event EscolasAdicionadas(string[] _nome);
-    event QuesitoAdicionados(string[] _nome);
+    event JuradoAdicionado(address indexed jurado, string _nomeJurado);
+    event EscolasAdicionadas(string[] _nomeEscola);
+    event QuesitoAdicionados(string[] _nomeQuesito);
 
     // Add new judge
     function addJurado(string memory _nomeJurado, uint _quesitoId) public onlyOwner returns (uint) {
-        require(_currentJuradoIndex < QUANTIDADE_JURADOS, "Quantidade maxima de jurados");
+        require(quantidadeJurados.length < QUANTIDADE_JURADOS, "Quantidade maxima de jurados");
         jurados[msg.sender] = Jurado({endereco: msg.sender, nome: _nomeJurado, quesitoId: _quesitoId});
-        quantidadeJurados[_currentJuradoIndex] = Jurado({endereco: msg.sender, nome: _nomeJurado, quesitoId: _quesitoId});
-        _currentJuradoIndex++;
+        quantidadeJurados.push(Jurado({endereco: msg.sender, nome: _nomeJurado, quesitoId: _quesitoId}));
+        
         emit JuradoAdicionado(msg.sender, _nomeJurado);
-        return _currentJuradoIndex - 1;
+        return quantidadeJurados.length - 1;
     }
 
+    
+
     // Add new teams
-    function addEscolas(string[] memory _nomeEscolas) public onlyOwner {
+    function addEscolas(string[] memory _nomeEscolas) private onlyOwner {
         require(_escolas.length < QUANTIDADE_ESCOLAS,"Quantidade maxima de escolas atingida");
         for (uint i = 0; i < _nomeEscolas.length; i++) {
             require(_currentEscolaIndex < QUANTIDADE_ESCOLAS, "Quantidade maxima de escolas atingida");
@@ -79,7 +88,7 @@ contract CarnavalScores is ERC20 {
     }
 
     // Add new quesitos
-    function addQuesitos(string[] memory _nomeQuesitos) public onlyOwner {
+    function addQuesitos(string[] memory _nomeQuesitos) private onlyOwner {
         require(_quesitos.length < QUANTIDADE_QUESITOS, "Quantidade maxima de quesitos atingida");
         for (uint i = 0; i < _nomeQuesitos.length; i++) {
             require(_currentQuesitoIndex < QUANTIDADE_QUESITOS, "Quantidade maxima de quesitos atingida");
@@ -110,16 +119,23 @@ contract CarnavalScores is ERC20 {
     }
 
     // Get all quesitos
-    function getAllQuesitos() public view returns  (Quesito[] memory){
+    function getQuesitos() public view returns  (string[] memory){
         require(_quesitos.length > 0, "No quesitos found");
     
-        return _quesitos;
+        return qsitos;
     }
     // Get all escolas
-    function getAllEscolas() public view returns  (Escola[] memory){
+    function getEscolas() public view returns  (string[] memory){
         require(_escolas.length > 0, "No escola found");
     
-        return _escolas;
+        return nomeEscolas;
+    }
+
+    // Get all judges
+    function getJurados() public view returns  (Jurado[] memory){
+        require(quantidadeJurados.length > 0, "No judge found");
+    
+        return quantidadeJurados;
     }
 
     // Clear all stored data

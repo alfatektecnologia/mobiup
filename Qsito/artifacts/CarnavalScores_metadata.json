@@ -127,7 +127,7 @@
 					{
 						"indexed": false,
 						"internalType": "string[]",
-						"name": "_nome",
+						"name": "_nomeEscola",
 						"type": "string[]"
 					}
 				],
@@ -146,7 +146,7 @@
 					{
 						"indexed": false,
 						"internalType": "string",
-						"name": "_nome",
+						"name": "_nomeJurado",
 						"type": "string"
 					}
 				],
@@ -159,7 +159,7 @@
 					{
 						"indexed": false,
 						"internalType": "string[]",
-						"name": "_nome",
+						"name": "_nomeQuesito",
 						"type": "string[]"
 					}
 				],
@@ -194,19 +194,6 @@
 			{
 				"inputs": [
 					{
-						"internalType": "string[]",
-						"name": "_nomeEscolas",
-						"type": "string[]"
-					}
-				],
-				"name": "addEscolas",
-				"outputs": [],
-				"stateMutability": "nonpayable",
-				"type": "function"
-			},
-			{
-				"inputs": [
-					{
 						"internalType": "string",
 						"name": "_nomeJurado",
 						"type": "string"
@@ -225,19 +212,6 @@
 						"type": "uint256"
 					}
 				],
-				"stateMutability": "nonpayable",
-				"type": "function"
-			},
-			{
-				"inputs": [
-					{
-						"internalType": "string[]",
-						"name": "_nomeQuesitos",
-						"type": "string[]"
-					}
-				],
-				"name": "addQuesitos",
-				"outputs": [],
 				"stateMutability": "nonpayable",
 				"type": "function"
 			},
@@ -323,24 +297,12 @@
 			},
 			{
 				"inputs": [],
-				"name": "getAllEscolas",
+				"name": "getEscolas",
 				"outputs": [
 					{
-						"components": [
-							{
-								"internalType": "uint256",
-								"name": "id",
-								"type": "uint256"
-							},
-							{
-								"internalType": "string",
-								"name": "nome",
-								"type": "string"
-							}
-						],
-						"internalType": "struct CarnavalScores.Escola[]",
+						"internalType": "string[]",
 						"name": "",
-						"type": "tuple[]"
+						"type": "string[]"
 					}
 				],
 				"stateMutability": "view",
@@ -348,22 +310,27 @@
 			},
 			{
 				"inputs": [],
-				"name": "getAllQuesitos",
+				"name": "getJurados",
 				"outputs": [
 					{
 						"components": [
 							{
-								"internalType": "uint256",
-								"name": "id",
-								"type": "uint256"
+								"internalType": "address",
+								"name": "endereco",
+								"type": "address"
 							},
 							{
 								"internalType": "string",
 								"name": "nome",
 								"type": "string"
+							},
+							{
+								"internalType": "uint256",
+								"name": "quesitoId",
+								"type": "uint256"
 							}
 						],
-						"internalType": "struct CarnavalScores.Quesito[]",
+						"internalType": "struct CarnavalScores.Jurado[]",
 						"name": "",
 						"type": "tuple[]"
 					}
@@ -396,29 +363,13 @@
 				"type": "function"
 			},
 			{
-				"inputs": [
-					{
-						"internalType": "address",
-						"name": "",
-						"type": "address"
-					}
-				],
-				"name": "jurados",
+				"inputs": [],
+				"name": "getQuesitos",
 				"outputs": [
 					{
-						"internalType": "address",
-						"name": "endereco",
-						"type": "address"
-					},
-					{
-						"internalType": "string",
-						"name": "nome",
-						"type": "string"
-					},
-					{
-						"internalType": "uint256",
-						"name": "quesitoId",
-						"type": "uint256"
+						"internalType": "string[]",
+						"name": "",
+						"type": "string[]"
 					}
 				],
 				"stateMutability": "view",
@@ -439,40 +390,6 @@
 						"internalType": "string",
 						"name": "",
 						"type": "string"
-					}
-				],
-				"stateMutability": "view",
-				"type": "function"
-			},
-			{
-				"inputs": [
-					{
-						"internalType": "uint256",
-						"name": "",
-						"type": "uint256"
-					}
-				],
-				"name": "notas",
-				"outputs": [
-					{
-						"internalType": "uint256",
-						"name": "escolaId",
-						"type": "uint256"
-					},
-					{
-						"internalType": "uint256",
-						"name": "quesitoId",
-						"type": "uint256"
-					},
-					{
-						"internalType": "address",
-						"name": "juradoId",
-						"type": "address"
-					},
-					{
-						"internalType": "uint256",
-						"name": "nota",
-						"type": "uint256"
 					}
 				],
 				"stateMutability": "view",
@@ -525,35 +442,6 @@
 						"internalType": "address",
 						"name": "",
 						"type": "address"
-					}
-				],
-				"stateMutability": "view",
-				"type": "function"
-			},
-			{
-				"inputs": [
-					{
-						"internalType": "uint256",
-						"name": "",
-						"type": "uint256"
-					}
-				],
-				"name": "quantidadeJurados",
-				"outputs": [
-					{
-						"internalType": "address",
-						"name": "endereco",
-						"type": "address"
-					},
-					{
-						"internalType": "string",
-						"name": "nome",
-						"type": "string"
-					},
-					{
-						"internalType": "uint256",
-						"name": "quesitoId",
-						"type": "uint256"
 					}
 				],
 				"stateMutability": "view",
@@ -820,11 +708,11 @@
 			]
 		},
 		"Qsito/carnaval.sol": {
-			"keccak256": "0x7c172c7d95afe2aa3af19baeeef9ab05a6f1dc275b4a937ae53b9617b34ea4ad",
+			"keccak256": "0xa68f231768bd3a12d3dba3a8377de2a56308b1ed429d2d20e45d5927034722f9",
 			"license": "MIT",
 			"urls": [
-				"bzz-raw://b38b691308ed8bc7a054ace2694b425006243cc4cc6ba1fcf5c31775791a611e",
-				"dweb:/ipfs/QmXckzaEvStKaZHKe8YaRWuqmZfp556rActaHahjehBtg7"
+				"bzz-raw://25d0231baf856a9db1f319300bdcdee37c5e40db50876db54c1c5f152318c313",
+				"dweb:/ipfs/QmduySxWaSqXDiZivYFpEyuB1yVLbDNHS6qQLYcdunj3zk"
 			]
 		}
 	},
